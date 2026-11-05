@@ -138,7 +138,6 @@ Todo el diseño está en el CSS dentro de `generar.mjs`:
 | Márgenes de seguridad | objeto `FORMATOS` al principio |
 | Tipografía | Poner un `Inter.ttf` en `fuentes/` (o cambiar el `font-family`) |
 
-Para otra marca o cliente: cambiar `logo.png` y los colores en `generar.mjs`.
 
 ## 🎬 Ajustes del reel (arriba de `reel.sh`)
 
