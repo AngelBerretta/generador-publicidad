@@ -4,3 +4,9 @@ clips/
 lista.txt
 musica.mp3
 .DS_Store
+
+# Imágenes de IA (pesadas, se comparten por otro medio)
+imagenes/**/*.png
+imagenes/**/*.jpg
+imagenes/**/*.jpeg
+imagenes/**/*.webp
