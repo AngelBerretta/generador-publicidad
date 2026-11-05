@@ -1,0 +1,26 @@
+{
+  "meta": { "numeracion": true, "progreso": false },
+  "slides": [
+    { "imagen": "01.png", "titulo": "¿Cuánto vendimos este mes?", "destacado": "este mes",
+      "subtexto": "Si todavía dependés de que alguien te lo arme, este carrusel es para vos →" },
+    { "imagen": "02.png", "titulo": "Fin de mes: 5 planillas abiertas y cero certezas", "destacado": "",
+      "subtexto": "Copiar, pegar, sumar… y rezar para que los números cierren." },
+    { "imagen": "03.png", "titulo": "Ahora imaginá tu negocio en una sola pantalla", "destacado": "una sola pantalla",
+      "subtexto": "Ventas, pedidos, stock y consultas. Todo junto, todo hoy." },
+    { "imagen": "04.png", "titulo": "Lo importante, en una mirada", "destacado": "en una mirada",
+      "subtexto": "Ventas, pedidos y conversión, con cuánto subieron o bajaron vs. el período anterior." },
+    { "imagen": "05.png", "titulo": "Gráficos que entendés sin ser analista", "destacado": "sin ser analista",
+      "subtexto": "Evolución, comparación y participación. Claro como el agua." },
+    { "imagen": "06.png", "titulo": "Filtrá a tu medida", "destacado": "a tu medida",
+      "subtexto": "Por fecha, categoría o estado. Sin pedir reportes nuevos." },
+    { "imagen": "07.png", "titulo": "Cada uno ve lo que le corresponde", "destacado": "lo que le corresponde",
+      "subtexto": "Acceso por persona y sesiones seguras. Tu información, protegida." },
+    { "imagen": "08.png", "titulo": "Todo tu equipo, en un solo lugar", "destacado": "en un solo lugar",
+      "subtexto": "Cargá, editá y seguí cada pedido o consulta sin salir del panel." },
+    { "imagen": "09.png", "titulo": "Reportes listos para presentar", "destacado": "listos para presentar",
+      "subtexto": "PDF, Excel o CSV con un clic. Para socios, contador o clientes." },
+    { "imagen": "10.png", "titulo": "Tu negocio en el bolsillo", "destacado": "en el bolsillo",
+      "subtexto": "Desde el celu, la tablet o la compu.",
+      "cta": "Pedí tu demo → @usuario" }
+  ]
+}

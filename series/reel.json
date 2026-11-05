@@ -1,0 +1,13 @@
+{
+  "meta": { "numeracion": false, "progreso": false, "tamTitulo": 92 },
+  "slides": [
+    { "imagen": "01.png", "titulo": "Fin de mes…", "destacado": "", "subtexto": "¿Otra vez armando el reporte a mano?" },
+    { "imagen": "02.png", "titulo": "¿Cuánto vendimos este mes?", "destacado": "este mes", "subtexto": "" },
+    { "imagen": "03.png", "titulo": "¿Y si todo estuviera en una sola pantalla?", "destacado": "una sola pantalla", "subtexto": "" },
+    { "imagen": "04.png", "titulo": "Ventas, pedidos y más, en una mirada", "destacado": "en una mirada", "subtexto": "" },
+    { "imagen": "05.png", "titulo": "Filtrás como quieras", "destacado": "como quieras", "subtexto": "" },
+    { "imagen": "06.png", "titulo": "Reporte listo en un clic", "destacado": "en un clic", "subtexto": "" },
+    { "imagen": "07.png", "titulo": "Tu negocio en una sola pantalla", "destacado": "una sola pantalla", "subtexto": "",
+      "cta": "Pedí tu demo → @usuario" }
+  ]
+}

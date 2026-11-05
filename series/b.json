@@ -1,0 +1,22 @@
+{
+  "meta": { "numeracion": false, "progreso": true },
+  "slides": [
+    { "imagen": "01.png", "titulo": "¿Cómo se arma un dashboard a medida?", "destacado": "a medida",
+      "subtexto": "Te mostramos el paso a paso, sin vueltas →" },
+    { "imagen": "02.png", "etiqueta": "PASO 1", "titulo": "Charlamos sobre tu negocio", "destacado": "tu negocio",
+      "subtexto": "Definimos juntos qué querés ver y de dónde salen tus datos." },
+    { "imagen": "03.png", "etiqueta": "PASO 2", "titulo": "Reunimos lo necesario", "destacado": "lo necesario",
+      "subtexto": "Métricas, fuente de datos, un mes de datos reales, tus reportes actuales, usuarios, logo y colores." },
+    { "imagen": "04.png", "etiqueta": "PASO 3", "titulo": "Conectamos tus datos", "destacado": "tus datos",
+      "subtexto": "Tu base de datos, tu tienda online, Excel/CSV o el sistema que ya usás." },
+    { "imagen": "05.png", "etiqueta": "PASO 4", "titulo": "Lo vestimos con tu marca", "destacado": "tu marca",
+      "subtexto": "Tu logo, tus colores, en modo claro y oscuro." },
+    { "imagen": "06.png", "etiqueta": "PASO 5", "titulo": "Probamos con tus números reales", "destacado": "números reales",
+      "subtexto": "Cero adornos: gráficos con información verdadera de tu negocio." },
+    { "imagen": "07.png", "etiqueta": "PASO 6", "titulo": "Definimos accesos y lo publicamos", "destacado": "lo publicamos",
+      "subtexto": "Cada persona con su usuario y su rol. Y tu tablero, online y funcionando." },
+    { "imagen": "08.png", "titulo": "Tu tablero, listo para decidir con datos", "destacado": "decidir con datos",
+      "subtexto": "¿Querés ver cómo quedaría con tu negocio?",
+      "cta": "Pedí tu demo → @usuario" }
+  ]
+}
