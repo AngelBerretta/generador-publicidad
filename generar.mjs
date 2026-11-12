@@ -29,8 +29,18 @@ const tamTitulo = meta.tamTitulo ?? 76;
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: F.w, height: F.h } });
 
+const ctaHtml = (cta) => {
+  if (!cta) return '';
+  const [llamado, destino] = cta.includes('→')
+    ? cta.split('→').map((p) => p.trim())
+    : ['', cta];
+  return `<div class="cta"><b>${esc(destino)}</b>${llamado ? `<span>${esc(llamado)}</span>` : ''}</div>`;
+};
+
 for (const [i, s] of slides.entries()) {
   const t = esc(s.titulo);
+  const rutaImg = s.imagen.includes('/') ? `imagenes/${s.imagen}` : `${dirImg}/${s.imagen}`;
+  const nombre = s.id ?? `lamina-${String(i + 1).padStart(2, '0')}`;
   const titulo = s.destacado ? t.replace(esc(s.destacado), `<span class="hl">${esc(s.destacado)}</span>`) : t;
 
   const puntos = meta.progreso
@@ -51,16 +61,24 @@ for (const [i, s] of slides.entries()) {
     .eti { color:#06B6D4; font-size:34px; font-weight:700; letter-spacing:4px; margin-bottom:18px; }
     h1 { color:#F1F5F9; font-size:${tamTitulo}px; line-height:1.1; font-weight:800; }
     .hl { color:#06B6D4; }
-    p { color:#94A3B8; font-size:36px; margin-top:28px; line-height:1.35; }
+    p { color:#CBD5E1; font-size:36px; font-weight:500; margin-top:28px; line-height:1.35;
+        text-shadow:0 2px 14px rgba(10,14,23,.85); }
     .num { position:absolute; top:${Math.max(F.top - 50, 40)}px; right:60px; color:#64748B; font-size:28px; }
     .prog { position:absolute; top:${Math.max(F.top - 55, 30)}px; left:70px; display:flex; gap:10px; }
     .prog i { width:44px; height:8px; border-radius:4px; background:#64748B; }
     .prog i.on { background:#3B82F6; }
     .logo { position:absolute; bottom:${F.bottom}px; right:60px; height:70px; }
-    .cta { position:absolute; bottom:${F.bottom}px; left:70px; background:#3B82F6; color:#fff;
-           font-size:36px; font-weight:800; padding:22px 40px; border-radius:20px; }
+    .cta { 
+        position:absolute; bottom:${F.bottom}px; left:70px; 
+        padding:22px 40px; border-radius:22px; text-align:left; color:#fff;
+        background:linear-gradient(135deg,#3B82F6,#06B6D4);
+        border:1px solid rgba(255,255,255,.25);
+        box-shadow:0 12px 36px rgba(59,130,246,.35); 
+    }
+    .cta b { display:block; font-size:38px; font-weight:800; line-height:1.15; color: #000; }
+    .cta span { display:block; font-size:28px; font-weight:500; opacity:.92; margin-top:4px; }          
   </style></head><body>
-    <img class="bg" src="data:image/png;base64,${b64(`${dirImg}/${s.imagen}`)}">
+    <<img class="bg" src="data:image/png;base64,${b64(rutaImg)}">
     <div class="fade"></div><div class="fadeb"></div>
     ${meta.numeracion ? `<div class="num">${i + 1}/${slides.length}</div>` : ''}
     ${puntos}
@@ -69,13 +87,15 @@ for (const [i, s] of slides.entries()) {
       <h1>${titulo}</h1>
       ${s.subtexto ? `<p>${esc(s.subtexto)}</p>` : ''}
     </div>
-    ${s.cta ? `<div class="cta">${esc(s.cta)}</div>` : ''}
+    ${ctaHtml(s.cta)}
     <img class="logo" src="data:image/png;base64,${logo}">
   </body></html>`;
 
   await page.setContent(html);
   await page.evaluate(() => document.fonts.ready);
-  await page.screenshot({ path: `${dirOut}/lamina-${String(i + 1).padStart(2, '0')}.png` });
-  console.log(`✔ ${dirOut}/lamina-${String(i + 1).padStart(2, '0')}.png`);
+  // await page.screenshot({ path: `${dirOut}/lamina-${String(i + 1).padStart(2, '0')}.png` });
+  // console.log(`✔ ${dirOut}/lamina-${String(i + 1).padStart(2, '0')}.png`);
+  await page.screenshot({ path: `${dirOut}/${nombre}.png` });
+  console.log(`✔ ${dirOut}/${nombre}.png`);  
 }
 await browser.close();

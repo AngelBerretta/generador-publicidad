@@ -1,0 +1,10 @@
+{
+  "meta": { "numeracion": true, "progreso": false },
+  "slides": [
+    {"imagen": "01.png", "titulo": "Tu tienda, abierta mientras descansás", "destacado": "mientras descansás", "subtexto": "Vendé online todos los días, sin atender el mostrador →"},
+    {"imagen": "02.png", "titulo": "Pedidos por mensaje, anotados en papelitos", "destacado": "en papelitos", "subtexto": "Se pierden ventas, se duplican envíos y nadie sabe qué quedó pendiente."},
+    {"imagen": "03.png", "titulo": "Todos tus pedidos, ordenados en un solo lugar", "destacado": "en un solo lugar", "subtexto": "Productos, cobros y envíos desde el mismo panel."},
+    {"imagen": "04.png", "titulo": "Cada venta, al instante", "destacado": "al instante", "subtexto": "Te enterás apenas alguien compra, y cobrás con MercadoPago y otros medios."},
+    {"imagen": "05.png", "titulo": "Tu producto, en la puerta de tu cliente", "destacado": "en la puerta de tu cliente", "subtexto": "Armemos tu tienda online juntos.", "cta": "Pedí tu presupuesto → linkincode.com"}
+  ]
+}

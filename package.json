@@ -11,7 +11,9 @@
     "a": "node generar.mjs a feed",
     "b": "node generar.mjs b feed",
     "reel:frames": "node generar.mjs reel story",
-    "reel:video": "bash reel.sh"
+    "reel:video": "bash reel.sh",
+    "posts": "node generar.mjs posts feed"
+
   },
   "dependencies": {
     "playwright": "^1.64.1"
