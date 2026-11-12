@@ -1,8 +1,14 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 
-// Uso: node generar.mjs <serie: a|b|reel> <formato: feed|cuadrado|story>
-const [serie = 'a', formato = 'feed'] = process.argv.slice(2);
+// Uso: node generar.mjs <serie> <formato: feed|cuadrado|story> [modo: carrusel|post]
+//   carrusel (defecto): usa "slides" del JSON → salida/<serie>-<formato>/lamina-XX.png
+//   post:               usa "posts"  del JSON → salida/<serie>-<formato>/posts/post-XX.png
+const [serie, formato = 'feed', modo = 'carrusel'] = process.argv.slice(2);
+
+const MAX_CARRUSEL = 4; // máximo de láminas por carrusel (se puede subir por serie con meta.maxLaminas)
+
+const fallar = (msg) => { console.error(`✖ ${msg}`); process.exit(1); };
 
 // "top" y "bottom" son márgenes de seguridad (en story, la interfaz de Instagram tapa arriba y abajo)
 const FORMATOS = {
@@ -11,12 +17,40 @@ const FORMATOS = {
   story:    { w: 1080, h: 1920, top: 250, bottom: 340 },
 };
 const F = FORMATOS[formato];
-if (!F) throw new Error('Formato inválido: usá feed, cuadrado o story');
+if (!serie) fallar('Uso: node generar.mjs <serie> <feed|cuadrado|story> [carrusel|post]');
+if (!F) fallar('Formato inválido: usá feed, cuadrado o story');
+if (!['carrusel', 'post'].includes(modo)) fallar('Modo inválido: usá carrusel o post');
 
-const { meta, slides } = JSON.parse(fs.readFileSync(`series/${serie}.json`, 'utf8'));
+const archivoJson = `series/${serie}.json`;
+if (!fs.existsSync(archivoJson)) fallar(`No existe ${archivoJson}`);
+
+const data = JSON.parse(fs.readFileSync(archivoJson, 'utf8'));
+const meta = data.meta ?? {};
+const esPost = modo === 'post';
+const slides = esPost ? data.posts : data.slides;
+
+if (!Array.isArray(slides) || slides.length === 0) {
+  fallar(`${archivoJson} no tiene "${esPost ? 'posts' : 'slides'}" cargados.`);
+}
+
+const limite = meta.maxLaminas ?? MAX_CARRUSEL;
+if (!esPost && slides.length > limite) {
+  fallar(`${serie}: el carrusel tiene ${slides.length} láminas y el máximo es ${limite}. Sacá ${slides.length - limite} de series/${serie}.json.`);
+}
+
 const dirImg = `imagenes/${serie}`;
-const dirOut = `salida/${serie}-${formato}`;
+const dirOut = esPost ? `salida/${serie}-${formato}/posts` : `salida/${serie}-${formato}`;
+const prefijo = esPost ? 'post' : 'lamina';
 fs.mkdirSync(dirOut, { recursive: true });
+
+// Resolver rutas y validar que existan todas las imágenes antes de abrir el navegador
+const items = slides.map((s, i) => ({
+  s,
+  rutaImg: s.imagen.includes('/') ? `imagenes/${s.imagen}` : `${dirImg}/${s.imagen}`,
+  nombre: s.id ?? `${prefijo}-${String(i + 1).padStart(2, '0')}`,
+}));
+const faltan = items.filter((x) => !fs.existsSync(x.rutaImg));
+if (faltan.length) fallar(`Faltan imágenes:\n  ${faltan.map((x) => x.rutaImg).join('\n  ')}`);
 
 const b64 = (f) => fs.readFileSync(f).toString('base64');
 const esc = (t = '') => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -24,7 +58,10 @@ const logo = b64('logo.png');
 const fuente = fs.existsSync('fuentes/Inter.ttf')
   ? `@font-face { font-family:'Inter'; src:url(data:font/ttf;base64,${b64('fuentes/Inter.ttf')}); font-weight:100 900; }`
   : '';
-const tamTitulo = meta.tamTitulo ?? 76;
+
+// Numeración y barra de progreso solo tienen sentido en carruseles
+const conNumeracion = !esPost && meta.numeracion;
+const conProgreso = !esPost && meta.progreso;
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: F.w, height: F.h } });
@@ -37,13 +74,15 @@ const ctaHtml = (cta) => {
   return `<div class="cta"><b>${esc(destino)}</b>${llamado ? `<span>${esc(llamado)}</span>` : ''}</div>`;
 };
 
-for (const [i, s] of slides.entries()) {
+for (const [i, { s, rutaImg, nombre }] of items.entries()) {
   const t = esc(s.titulo);
-  const rutaImg = s.imagen.includes('/') ? `imagenes/${s.imagen}` : `${dirImg}/${s.imagen}`;
-  const nombre = s.id ?? `lamina-${String(i + 1).padStart(2, '0')}`;
+  if (s.destacado && !t.includes(esc(s.destacado))) {
+    console.warn(`⚠ ${nombre}: "destacado" no coincide con el título, no se va a resaltar.`);
+  }
   const titulo = s.destacado ? t.replace(esc(s.destacado), `<span class="hl">${esc(s.destacado)}</span>`) : t;
+  const tamTitulo = s.tamTitulo ?? meta.tamTitulo ?? 76;
 
-  const puntos = meta.progreso
+  const puntos = conProgreso
     ? `<div class="prog">${slides.map((_, k) => `<i class="${k <= i ? 'on' : ''}"></i>`).join('')}</div>`
     : '';
 
@@ -68,19 +107,19 @@ for (const [i, s] of slides.entries()) {
     .prog i { width:44px; height:8px; border-radius:4px; background:#64748B; }
     .prog i.on { background:#3B82F6; }
     .logo { position:absolute; bottom:${F.bottom}px; right:60px; height:70px; }
-    .cta { 
-        position:absolute; bottom:${F.bottom}px; left:70px; 
+    .cta {
+        position:absolute; bottom:${F.bottom}px; left:70px;
         padding:22px 40px; border-radius:22px; text-align:left; color:#fff;
         background:linear-gradient(135deg,#3B82F6,#06B6D4);
         border:1px solid rgba(255,255,255,.25);
-        box-shadow:0 12px 36px rgba(59,130,246,.35); 
+        box-shadow:0 12px 36px rgba(59,130,246,.35);
     }
-    .cta b { display:block; font-size:38px; font-weight:800; line-height:1.15; color: #000; }
-    .cta span { display:block; font-size:28px; font-weight:500; opacity:.92; margin-top:4px; }          
+    .cta b { display:block; font-size:38px; font-weight:800; line-height:1.15; color:#000; }
+    .cta span { display:block; font-size:28px; font-weight:500; opacity:.92; margin-top:4px; }
   </style></head><body>
-    <<img class="bg" src="data:image/png;base64,${b64(rutaImg)}">
+    <img class="bg" src="data:image/png;base64,${b64(rutaImg)}">
     <div class="fade"></div><div class="fadeb"></div>
-    ${meta.numeracion ? `<div class="num">${i + 1}/${slides.length}</div>` : ''}
+    ${conNumeracion ? `<div class="num">${i + 1}/${slides.length}</div>` : ''}
     ${puntos}
     <div class="txt">
       ${s.etiqueta ? `<div class="eti">${esc(s.etiqueta)}</div>` : ''}
@@ -93,9 +132,7 @@ for (const [i, s] of slides.entries()) {
 
   await page.setContent(html);
   await page.evaluate(() => document.fonts.ready);
-  // await page.screenshot({ path: `${dirOut}/lamina-${String(i + 1).padStart(2, '0')}.png` });
-  // console.log(`✔ ${dirOut}/lamina-${String(i + 1).padStart(2, '0')}.png`);
   await page.screenshot({ path: `${dirOut}/${nombre}.png` });
-  console.log(`✔ ${dirOut}/${nombre}.png`);  
+  console.log(`✔ ${dirOut}/${nombre}.png`);
 }
 await browser.close();

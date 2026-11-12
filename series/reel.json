@@ -1,5 +1,5 @@
 {
-  "meta": { "numeracion": false, "progreso": false, "tamTitulo": 92 },
+  "meta": { "numeracion": false, "progreso": false, "tamTitulo": 92, "maxLaminas": 7 },
   "slides": [
     { "imagen": "01.png", "titulo": "Fin de mes…", "destacado": "", "subtexto": "¿Otra vez armando el reporte a mano?" },
     { "imagen": "02.png", "titulo": "¿Cuánto vendimos este mes?", "destacado": "este mes", "subtexto": "" },

@@ -8,14 +8,13 @@
     "node": ">=20"
   },
   "scripts": {
-    "a": "node generar.mjs a feed",
-    "b": "node generar.mjs b feed",
+    "gen": "node generar.mjs",
+    "convertir": "node convertir.mjs",
     "reel:frames": "node generar.mjs reel story",
-    "reel:video": "bash reel.sh",
-    "posts": "node generar.mjs posts feed"
-
+    "reel:video": "bash reel.sh"
   },
   "dependencies": {
-    "playwright": "^1.64.1"
+    "playwright": "^1.64.1",
+    "sharp": "^0.35.5"
   }
 }
